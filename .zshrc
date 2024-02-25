@@ -11,6 +11,9 @@ export ZSH=$HOME/.zsh
 export PATH="$HOME/.local/bin:$PATH"
 export _ZO_ECHO='1'
 export GPG_TTY=$(tty)
+export PATH=$PATH:/home/srhills/.local/share/gem/ruby/3.0.0/bin
+export PATH=$PATH:/usr/local/go/bin 
+export PATH=$PATH:$GOPATH/bin
 ### ---- autocompletions -----------------------------------
 autoload -Uz compinit && compinit
 
@@ -387,3 +390,4 @@ export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
 eval "$(starship init zsh)"
 # Load Zoxdide
 eval "$(zoxide init --cmd cd zsh)"
+source $(dirname $(gem which colorls))/tab_complete.sh
