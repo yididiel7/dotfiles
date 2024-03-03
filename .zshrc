@@ -12,8 +12,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export _ZO_ECHO='1'
 export GPG_TTY=$(tty)
 export PATH=$PATH:/home/srhills/.local/share/gem/ruby/3.0.0/bin
-export PATH=$PATH:/usr/local/go/bin 
-export PATH=$PATH:$GOPATH/bin
 ### ---- autocompletions -----------------------------------
 autoload -Uz compinit && compinit
 
@@ -42,6 +40,8 @@ setopt HIST_IGNORE_ALL_DUPS
 #
 # Input/output
 #
+unalias run-help 2>/dev/null
+autoload -U run-help
 
 # Set editor default keymap to emacs (`-e`) or vi (`-v`)
 bindkey -v
@@ -50,7 +50,7 @@ bindkey -v
 setopt CORRECT
 
 # Customize spelling correction prompt.
-SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+SPROMPT='zsh: correct %F{#f14e32}%R%f to %F{green}%r%f [nyae]? '
 
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
@@ -195,13 +195,13 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -230,26 +230,6 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 fpath+=($HOME/.zsh/pure)
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-# Aliases
 
 # ---- switched to abbreviations ------------
 # alias gst="git status"
@@ -258,9 +238,6 @@ fpath+=($HOME/.zsh/pure)
 
 alias ls="exa --icons --group-directories-first -l"
 alias ll="exa --icons --group-directories-first -la"
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # On-demand rehash
 zshcache_time="$(date +%s%N)"
@@ -283,14 +260,6 @@ add-zsh-hook -Uz precmd rehash_precmd
 alias zshconfig="geany ~/.zshrc"
 alias ohmyzsh="thunar ~/.oh-my-zsh"
 
-# ls
-#alias l='ls -lh'
-#alias ll='ls -lah'
-#alias la='ls -A'
-#alias lm='ls -m'
-#alias lr='ls -R'
-#alias lg='ls -l --group-directories-first'
-
 # git
 alias gcl='git clone --depth 1'
 alias gi='git init'
@@ -302,9 +271,6 @@ alias gp='git push origin master'
 alias air='ansiweather -l Dimona,Il -u metric -s true -f 5 -d true'
 #create a file called .zshrc-personal and put all your personal aliases
 #in there. They will not be overwritten by skel.
-
-[[ -f ~/.zshrc-personal ]] && . ~/.zshrc-personal
-
 # Created by `pipx` on 2023-12-24 23:04:58
 export PATH="$PATH:/home/srhills/.local/bin"
 # Default editor is Micro Editor
@@ -312,36 +278,27 @@ export EDITOR=/usr/bin/micro
 # Micro Colorscheme
 export "MICRO_TRUECOLOR=1"
 export MICRO_LSP='python=pyls,go=gopls,typescript=deno lsp={"importMap":"import_map.json"},rust=rust-analyzer'
-# FZF preview Alias
-alias fzf-preview="fzf --preview='bat --color=always --style=numbers {}'"
-# create a file called .zshrc-personal and put all your personal aliases
-# in there. They will not be overwritten by skel
-
 # FZF
 zle     -N            fzf-cd-widget
 bindkey -M vicmd '\C-e' fzf-cd-widget
 bindkey -M viins '\C-e' fzf-cd-widget
 # Contorl FZF
-export FZF_CTRL_T_OPTS="--height 40% \
+export FZF_CTRL_T_OPTS="--height 60% \
 --border sharp \
 --layout reverse \
 --prompt '∷ ' \
 --pointer ▶ \
 --marker ⇒"
 # Define $FZF_DEFAULT_OPTS like so:
-export FZF_DEFAULT_OPTS="--height=30% --layout=reverse --info=inline --border --margin=1 --padding=1"
-export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --info=inline --border --margin=1 --padding=1"
 # Find Command Function
-cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+export FZF_DEFAULT_OPTS="--preview 'bat --color=always {}'"
 # fzf ctrl-r and alt-c behavior
-export FZF_DEFAULT_COMMAND="fd --hidden"
+export FZF_DEFAULT_COMMAND="fd --type f"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
--o -type f -print \
--o -type d -print \
--o -type l -print 2> /dev/null | cut -b3-"}"
 
+# Source key-bindings.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source "$HOME/.fzf/shell/key-bindings.zsh"
@@ -384,7 +341,7 @@ export LESS_TERMCAP_mh=$(tput dim)
 #Set prompt
 export SPROMPT="Correct %R to %r? [Yes, No, Abort, Edit] "
 #Set color
-export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color?
+export SPROMPT="Correct $fg[#f14e32]%R$reset_color to $fg[green]%r$reset_color?
  [Yes, No, Abort, Edit] "
 ### ---- Load Starship -----------------------------------
 eval "$(starship init zsh)"
